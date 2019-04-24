@@ -2,6 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
 class WordToGuess extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      flagEngPosition: { x: 0, y: 0 },
+      flagItaPosition: { x: 0, y: 0 }
+    }
+  }
+
   render() {
     return (
       <View style={styles.wordToGuess}>
@@ -16,6 +24,14 @@ class WordToGuess extends React.Component {
 }
 
 class WordList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      wordEngPosition: { x: 0, y: 0 },
+      wordItaPosition: { x: 0, y: 0 }
+    }
+  }
+
   render() {
     return (
       <View style={styles.wordList}>
@@ -33,22 +49,44 @@ class WordList extends React.Component {
 }
 
 class Timer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { time: 0 };
+  }
+
   render() {
     return (
-      <Text>Time: 25 seconds</Text>
+      <Text>Time: {this.state.time}</Text>
     )
   }
 }
 
 class Score extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { score: 0 };
+  }
+
   render() {
     return (
-      <Text style={{ textAlign: 'center' }}>Score: 3/30</Text>
+      <Text style={{ textAlign: 'center' }}>Score: {this.state.score}</Text>
     )
   }
 }
 
 export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      wordsToGuess: [],
+      flagEngPosition: { x: 0, y: 0 },
+      flagItaPosition: { x: 0, y: 0 },
+      wordEngPosition: { x: 0, y: 0 },
+      wordItaPosition: { x: 0, y: 0 }
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>

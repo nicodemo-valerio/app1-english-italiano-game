@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, PanResponder, Animated } from 'react-native';
+import Flag from './Flag.js';
 import styles from '../Style.js';
 
 class WordToGuess extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            flagEngPosition: { x: 0, y: 0 },
-            flagItaPosition: { x: 0, y: 0 }
+            word: props.currentWord
         }
     }
 
     render() {
         return (
             <View style={styles.wordToGuess}>
-                <Image source={require('../images/flag-eng.png')} />
+                <Flag type="eng" updateFlagPosition={this.props.updateFlagPosition} />
                 <Image
-                    source={require('../images/house.png')}
+                    source={this.state.word.img}
                     style={styles.wordImage} />
-                <Image source={require('../images/flag-ita.png')} />
+                <Flag type="ita" updateFlagPosition={this.props.updateFlagPosition} />
             </View>
         )
     }

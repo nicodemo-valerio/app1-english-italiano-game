@@ -30,7 +30,10 @@ export default styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItems: 'stretch',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: 'red'
     },
     word: {
         padding: 5,

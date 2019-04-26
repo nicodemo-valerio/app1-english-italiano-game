@@ -31,10 +31,10 @@ export class Flag extends Component {
                 this.state.pan.flattenOffset();
                 this.props.updateFlagPosition(this.props.type, gestureState.moveX, gestureState.moveY);
 
-                /* Animated.spring(            
-                    this.state.pan,         
+                Animated.spring(
+                    this.state.pan,
                     { toValue: { x: 0, y: 0 } }
-                ).start(); */
+                ).start();
             }
         });
     }

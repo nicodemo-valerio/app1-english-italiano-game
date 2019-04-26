@@ -43,7 +43,9 @@ export default class App extends React.Component {
       flagEngPosition: null,
       flagItaPosition: null,
       wordEngPosition: null,
-      wordItaPosition: null
+      wordItaPosition: null,
+      isEngFlagVisible: true,
+      isItaFlagVisible: true
     }
   }
 
@@ -55,24 +57,49 @@ export default class App extends React.Component {
     return false;
   }
 
+
+
   updateFlagPosition = (lang, moveX, moveY) => {
     if (lang === 'eng') {
       this.setState({ flagEngPosition: { moveX: moveX, moveY: moveY } },
         () => {
           if (this.checkPosition(moveX, moveY, this.state.wordEngPosition)) {
-            console.log('Guessed!');
-          } else { console.log('Not guessed!'); }
+            if (!this.state.isItaFlagVisible) {
+              const words = this.state.words;
+              words.shift();
+              this.setState({
+                words: words,
+                isEngFlagVisible: true,
+                isItaFlagVisible: true
+              });
+            } else {
+              this.setState({ isEngFlagVisible: false });
+            }
+          }
         });
     }
     if (lang === 'ita') {
       this.setState({ flagItaPosition: { moveX: moveX, moveY: moveY } },
         () => {
           if (this.checkPosition(moveX, moveY, this.state.wordItaPosition)) {
-            console.log('Indovinato!');
-          } else { console.log('Non indovinato!'); }
-        });
+            if (!this.state.isEngFlagVisible) {
+              const words = this.state.words;
+              words.shift();
+              this.setState({
+                words: words,
+                isEngFlagVisible: true,
+                isItaFlagVisible: true
+              });
+            } else {
+              this.setState({ isItaFlagVisible: false });
+            }
+          }
+        }
+      )
     }
   }
+
+
 
   setWordPosition = (lang, x, y, width, height) => {
     let newPosition = null;
@@ -100,7 +127,10 @@ export default class App extends React.Component {
         <View>
           <Text style={styles.pageTitle}>English VS Italiano</Text>
         </View>
-        <WordToGuess currentWord={this.state.words[0]} updateFlagPosition={this.updateFlagPosition} />
+        <WordToGuess words={this.state.words}
+          updateFlagPosition={this.updateFlagPosition}
+          isEngFlagVisible={this.state.isEngFlagVisible}
+          isItaFlagVisible={this.state.isItaFlagVisible} />
         <WordList words={this.state.words} setWordPosition={this.setWordPosition} />
         <View style={styles.stats}>
           <Score score={this.state.words.length} />

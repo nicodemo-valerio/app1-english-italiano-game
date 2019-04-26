@@ -40,16 +40,20 @@ export class Flag extends Component {
     }
 
     render() {
-        let { pan } = this.state;
-        let [translateX, translateY] = [pan.x, pan.y];
-        let imageStyle = { transform: [{ translateX }, { translateY }], zIndex: 10 };
-        const flagImg = (this.props.type === 'eng') ? require('../images/flag-eng.png') : require('../images/flag-ita.png');
-        return (
-            <Animated.Image
-                style={imageStyle}
-                {...this._panResponder.panHandlers}
-                source={flagImg} />
-        )
+        if (this.props.isVisible) {
+            let { pan } = this.state;
+            let [translateX, translateY] = [pan.x, pan.y];
+            let imageStyle = { transform: [{ translateX }, { translateY }], zIndex: 10 };
+            const flagImg = (this.props.type === 'eng') ? require('../images/flag-eng.png') : require('../images/flag-ita.png');
+            return (
+                <Animated.Image
+                    style={imageStyle}
+                    {...this._panResponder.panHandlers}
+                    source={flagImg} />
+            )
+        } else {
+            return null;
+        }
     }
 }
 

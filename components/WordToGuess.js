@@ -6,19 +6,20 @@ import styles from '../Style.js';
 class WordToGuess extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            word: props.currentWord
-        }
     }
 
     render() {
         return (
             <View style={styles.wordToGuess}>
-                <Flag type="eng" updateFlagPosition={this.props.updateFlagPosition} />
+                <Flag type="eng"
+                    updateFlagPosition={this.props.updateFlagPosition}
+                    isVisible={this.props.isEngFlagVisible} />
                 <Image
-                    source={this.state.word.img}
+                    source={this.props.words[0].img}
                     style={styles.wordImage} />
-                <Flag type="ita" updateFlagPosition={this.props.updateFlagPosition} />
+                <Flag type="ita"
+                    updateFlagPosition={this.props.updateFlagPosition}
+                    isVisible={this.props.isItaFlagVisible} />
             </View>
         )
     }

@@ -7,42 +7,45 @@ class WordList extends React.Component {
         super(props);
     }
 
-    setEngPosition = e => {
-        const x = e.nativeEvent.layout.x;
-        const y = e.nativeEvent.layout.y;
-        const width = e.nativeEvent.layout.width;
-        const height = e.nativeEvent.layout.height;
-        this.props.setWordPosition('eng', x, y, width, height);
-    }
-
-    setItaPosition = e => {
-        const x = e.nativeEvent.layout.x;
-        const y = e.nativeEvent.layout.y;
-        const width = e.nativeEvent.layout.width;
-        const height = e.nativeEvent.layout.height;
-        this.props.setWordPosition('ita', x, y, width, height);
+    setWordPosition = (e, lang) => {
+        //console.log('WordList.setWordPosition(): ', lang);
+        this.props.setWordPosition(
+            lang,
+            e.nativeEvent.layout.x,
+            e.nativeEvent.layout.y,
+            e.nativeEvent.layout.width,
+            e.nativeEvent.layout.height);
     }
 
     setWordContainerPosition = e => {
-        const x = e.nativeEvent.layout.x;
-        const y = e.nativeEvent.layout.y;
-        this.props.setWordPosition('eng', x, y, 0, 0);
-        this.props.setWordPosition('ita', x, y, 0, 0);
+        //console.log('WordList.setWordContainerPosition(): ');
+        this.props.setWordPosition('eng', e.nativeEvent.layout.x, e.nativeEvent.layout.y, 0, 0);
+        this.props.setWordPosition('ita', e.nativeEvent.layout.x, e.nativeEvent.layout.y, 0, 0);
     }
 
     render() {
         return (
-            <View style={styles.wordList} onLayout={e => this.setWordContainerPosition(e)}>
-                <View onLayout={e => this.setItaPosition(e)}><Text style={styles.word}>{this.props.words[0].ita}</Text></View>
-                <Text style={styles.word}>{this.props.words[1].eng}</Text>
-                <Text style={styles.word}>{this.props.words[2].ita}</Text>
-                <Text style={styles.word}>{this.props.words[3].eng}</Text>
-                <Text style={styles.word}>{this.props.words[2].eng}</Text>
-                <Text style={styles.word}>{this.props.words[3].ita}</Text>
-                <View onLayout={e => this.setEngPosition(e)}><Text style={styles.word}>{this.props.words[0].eng}</Text></View>
-                <Text style={styles.word}>{this.props.words[1].ita}</Text>
+            <View style={styles.wordList}
+                onLayout={e => this.setWordContainerPosition(e)}>
+                {this.props.wordList.map((word, index) => {
+                    console.log('map: ', index, word, this.props.currentWord);
+                    if (word === this.props.currentWord.eng || word === this.props.currentWord.ita) {
+                        return <Text
+                            style={styles.word}
+                            key={index}
+                            onLayout={e => this.setWordPosition(e, (word === this.props.currentWord.eng ? 'eng' : 'ita'))}>
+                            {word}
+                        </Text>
+                    } else {
+                        return <Text
+                            style={styles.word}
+                            key={index}>
+                            {word}
+                        </Text>
+                    }
+                })}
             </View>
-        )
+        );
     }
 }
 

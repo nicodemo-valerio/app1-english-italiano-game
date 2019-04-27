@@ -6,7 +6,8 @@ export class Flag extends Component {
         super(props);
         this.state = {
             lang: props.type,
-            pan: new Animated.ValueXY()
+            pan: new Animated.ValueXY(),
+            isVisible: true
         }
     }
 
@@ -29,6 +30,7 @@ export class Flag extends Component {
             onPanResponderRelease: (e, gestureState) => {
                 // Flatten the offset to avoid erratic behavior
                 this.state.pan.flattenOffset();
+
                 this.props.updateFlagPosition(this.props.type, gestureState.moveX, gestureState.moveY);
 
                 Animated.spring(
@@ -40,20 +42,23 @@ export class Flag extends Component {
     }
 
     render() {
-        if (this.props.isVisible) {
-            let { pan } = this.state;
-            let [translateX, translateY] = [pan.x, pan.y];
-            let imageStyle = { transform: [{ translateX }, { translateY }], zIndex: 10 };
-            const flagImg = (this.props.type === 'eng') ? require('../images/flag-eng.png') : require('../images/flag-ita.png');
-            return (
-                <Animated.Image
-                    style={imageStyle}
-                    {...this._panResponder.panHandlers}
-                    source={flagImg} />
-            )
+        let { pan } = this.state;
+        let [translateX, translateY] = [pan.x, pan.y];
+        let imageStyle = { transform: [{ translateX }, { translateY }], zIndex: 10 };
+        let flagImg;
+        if (this.props.isVisible === false) {
+            flagImg = require('../images/white.png');
         } else {
-            return null;
+            flagImg = (this.props.type === 'eng') ? require('../images/flag-eng.png') : require('../images/flag-ita.png');
         }
+
+        return (
+            <Animated.Image
+                style={imageStyle}
+                {...this._panResponder.panHandlers}
+                source={flagImg} />
+        )
+
     }
 }
 

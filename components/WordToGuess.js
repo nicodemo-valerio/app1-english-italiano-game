@@ -9,19 +9,22 @@ class WordToGuess extends React.Component {
     }
 
     render() {
-        return (
-            <View style={styles.wordToGuess}>
-                <Flag type="eng"
-                    updateFlagPosition={this.props.updateFlagPosition}
-                    isVisible={this.props.isEngFlagVisible} />
-                <Image
-                    source={this.props.words[0].img}
-                    style={styles.wordImage} />
-                <Flag type="ita"
-                    updateFlagPosition={this.props.updateFlagPosition}
-                    isVisible={this.props.isItaFlagVisible} />
-            </View>
-        )
+        if (this.props.currentWord !== null) {
+            return (
+                <View style={styles.wordToGuess}>
+                    <Flag type="eng"
+                        updateFlagPosition={this.props.updateFlagPosition}
+                        isVisible={this.props.isEngFlagVisible} />
+                    <Image
+                        source={this.props.currentWord.img}
+                        style={styles.wordImage} />
+                    <Flag type="ita"
+                        updateFlagPosition={this.props.updateFlagPosition}
+                        isVisible={this.props.isItaFlagVisible} />
+                </View>
+            )
+        }
+        return null;
     }
 }
 

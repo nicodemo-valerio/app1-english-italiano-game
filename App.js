@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, Image } from 'react-native';
 import styles from './Style.js';
-import words from './Words.js';
+import Word from './Words.js';
 import WordToGuess from './components/WordToGuess';
 import WordList from './components/WordList';
 
@@ -21,15 +21,11 @@ class Timer extends React.Component {
 class Score extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      score: 0,
-      total: props.score,
-    };
   }
 
   render() {
     return (
-      <Text style={{ textAlign: 'center' }}>Score: {this.state.score}/{this.state.total}</Text>
+      <Text style={{ textAlign: 'center' }}>Score: {this.props.score}</Text>
     )
   }
 }
@@ -39,14 +35,31 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      words: words,
+      words: [],
+      wordList: [],
+      currentWord: null,
       flagEngPosition: null,
       flagItaPosition: null,
       wordEngPosition: null,
       wordItaPosition: null,
       isEngFlagVisible: true,
-      isItaFlagVisible: true
+      isItaFlagVisible: true,
+      score: 0
     }
+  }
+
+  componentDidMount() {
+    const word = new Word();
+
+    const words = word.getWords();
+
+    let wordList = words.map(w => w.eng);
+    wordList = wordList.concat(words.map(w => w.ita));
+    wordList = word.shuffleArray(wordList);
+
+    const currentWord = words[0];
+
+    this.setState({ words, wordList, currentWord });
   }
 
   checkPosition = (moveX, moveY, wordPosition) => {
@@ -57,7 +70,20 @@ export default class App extends React.Component {
     return false;
   }
 
-
+  updateLists = (wordToDelete) => {
+    const words = this.state.words.filter(word => word !== wordToDelete);
+    const wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
+    const currentWord = words[0];
+    const score = this.state.score + 1;
+    this.setState({
+      words,
+      wordList,
+      currentWord,
+      isEngFlagVisible: true,
+      isItaFlagVisible: true,
+      score
+    });
+  }
 
   updateFlagPosition = (lang, moveX, moveY) => {
     if (lang === 'eng') {
@@ -65,14 +91,11 @@ export default class App extends React.Component {
         () => {
           if (this.checkPosition(moveX, moveY, this.state.wordEngPosition)) {
             if (!this.state.isItaFlagVisible) {
-              const words = this.state.words;
-              words.shift();
-              this.setState({
-                words: words,
-                isEngFlagVisible: true,
-                isItaFlagVisible: true
-              });
+              console.log('Guessed 2');
+              const wordToDelete = this.state.currentWord;
+              this.updateLists(wordToDelete);
             } else {
+              console.log('Guessed 1');
               this.setState({ isEngFlagVisible: false });
             }
           }
@@ -83,14 +106,11 @@ export default class App extends React.Component {
         () => {
           if (this.checkPosition(moveX, moveY, this.state.wordItaPosition)) {
             if (!this.state.isEngFlagVisible) {
-              const words = this.state.words;
-              words.shift();
-              this.setState({
-                words: words,
-                isEngFlagVisible: true,
-                isItaFlagVisible: true
-              });
+              console.log('Indovinato 2');
+              const wordToDelete = this.state.currentWord;
+              this.updateLists(wordToDelete);
             } else {
+              console.log('Indovinato 1');
               this.setState({ isItaFlagVisible: false });
             }
           }
@@ -98,8 +118,6 @@ export default class App extends React.Component {
       )
     }
   }
-
-
 
   setWordPosition = (lang, x, y, width, height) => {
     let newPosition = null;
@@ -113,6 +131,7 @@ export default class App extends React.Component {
     newPosition.y += y;
     newPosition.width += width;
     newPosition.height += height;
+    console.log('newPosition:', newPosition);
     if (lang === 'eng') {
       this.setState({ wordEngPosition: newPosition });
     } else {
@@ -127,13 +146,17 @@ export default class App extends React.Component {
         <View>
           <Text style={styles.pageTitle}>English VS Italiano</Text>
         </View>
-        <WordToGuess words={this.state.words}
+        <WordToGuess
+          currentWord={this.state.currentWord}
           updateFlagPosition={this.updateFlagPosition}
           isEngFlagVisible={this.state.isEngFlagVisible}
           isItaFlagVisible={this.state.isItaFlagVisible} />
-        <WordList words={this.state.words} setWordPosition={this.setWordPosition} />
+        <WordList
+          wordList={this.state.wordList}
+          currentWord={this.state.currentWord}
+          setWordPosition={this.setWordPosition} />
         <View style={styles.stats}>
-          <Score score={this.state.words.length} />
+          <Score score={this.state.score} />
           <Timer />
         </View>
       </View>

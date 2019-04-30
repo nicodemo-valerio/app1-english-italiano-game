@@ -72,11 +72,12 @@ export default class App extends React.Component {
     //game over
     if (words.length === 0) {
       const finalState = this.state;
+      finalState.words = words;
       finalState.currentWord = { eng: 'You win!', ita: 'Hai vinto!', img: require('./images/win.png') }
       finalState.wordList = ['You win!', 'Hai vinto!'];
       finalState.isEngFlagVisible = false;
       finalState.isItaFlagVisible = false;
-      finalState.updateTime = this.setTime(true);
+      finalState.score += 1;
       clearInterval(this.updateTime);
     } else {
       let wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
@@ -164,19 +165,6 @@ export default class App extends React.Component {
     //this.setState(newState, () => console.log('App.setWordPosition', this.state.wordEngPosition, this.state.wordItaPosition));
   }
 
-  setTime = (isGameOver) => {
-    const newState = this.state;
-    newState.time += 1;
-    this.setState(newState);
-    if (isGameOver) {
-      console.log('setTime game over');
-      clearInterval(this.state.updateTime);
-    }
-    if (newState.updateTime !== null) {
-      newState.updateTime();
-    }
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -193,7 +181,7 @@ export default class App extends React.Component {
           currentWord={this.state.currentWord}
           setWordPosition={this.setWordPosition} />
         <View style={styles.stats}>
-          <Score score={this.state.score} />
+          <Text>Score: {this.state.score} / {this.state.words.length + this.state.score}</Text>
           <Text>Time: {this.state.time} seconds</Text>
         </View>
       </View>

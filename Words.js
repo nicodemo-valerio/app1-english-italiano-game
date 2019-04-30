@@ -1,19 +1,34 @@
 export default class Word {
     words = [
         {
-            eng: 'bread',
-            ita: 'pane',
-            img: require('./images/bread.png')
-        },
-        {
             eng: 'bicycle',
             ita: 'bicicletta',
             img: require('./images/bicycle.png')
         },
         {
+            eng: 'bread',
+            ita: 'pane',
+            img: require('./images/bread.png')
+        },
+        {
+            eng: 'cat',
+            ita: 'gatto',
+            img: require('./images/cat.png')
+        },
+        {
+            eng: 'cow',
+            ita: 'mucca',
+            img: require('./images/cow.png')
+        },
+        {
             eng: 'dog',
             ita: 'cane',
             img: require('./images/dog.png')
+        },
+        {
+            eng: 'fish',
+            ita: 'pesce',
+            img: require('./images/fish.png')
         },
         {
             eng: 'hand',

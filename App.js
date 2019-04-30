@@ -6,19 +6,6 @@ const wordObj = new Word();
 import WordToGuess from './components/WordToGuess';
 import WordList from './components/WordList';
 
-class Timer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { time: 0 };
-  }
-
-  render() {
-    return (
-      <Text>Time: {this.state.time}</Text>
-    )
-  }
-}
-
 class Score extends React.Component {
   constructor(props) {
     super(props);
@@ -46,8 +33,11 @@ export default class App extends React.Component {
       wordItaPosition: { x: 0, y: 0 },
       isEngFlagVisible: true,
       isItaFlagVisible: true,
-      score: 0
+      score: 0,
+      time: 0,
+      updateTime: null
     }
+    this.updateTime = null;
   }
 
   componentDidMount() {
@@ -58,8 +48,15 @@ export default class App extends React.Component {
     wordList = wordObj.shuffleArray(wordList);
 
     const currentWord = words[0];
+    this.setState({
+      words,
+      wordList,
+      currentWord
+    });
 
-    this.setState({ words, wordList, currentWord });
+    this.updateTime = setInterval(() => {
+      this.setState({ time: this.state.time + 1 })
+    }, 1000);
   }
 
   checkPosition = (moveX, moveY, wordPosition) => {
@@ -72,13 +69,15 @@ export default class App extends React.Component {
 
   updateLists = (wordToDelete) => {
     const words = this.state.words.filter(word => word !== wordToDelete);
+    //game over
     if (words.length === 0) {
       const finalState = this.state;
-      finalState.currentWord = { eng: "You win!", ita: "Hai vinto!", img: require('./images/win.png') }
-      finalState.wordList = ["You win!", "Hai vinto!"];
+      finalState.currentWord = { eng: 'You win!', ita: 'Hai vinto!', img: require('./images/win.png') }
+      finalState.wordList = ['You win!', 'Hai vinto!'];
       finalState.isEngFlagVisible = false;
       finalState.isItaFlagVisible = false;
-      this.setState({ finalState });
+      finalState.updateTime = this.setTime(true);
+      clearInterval(this.updateTime);
     } else {
       let wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
       wordList = wordObj.shuffleArray(wordList);
@@ -165,6 +164,19 @@ export default class App extends React.Component {
     //this.setState(newState, () => console.log('App.setWordPosition', this.state.wordEngPosition, this.state.wordItaPosition));
   }
 
+  setTime = (isGameOver) => {
+    const newState = this.state;
+    newState.time += 1;
+    this.setState(newState);
+    if (isGameOver) {
+      console.log('setTime game over');
+      clearInterval(this.state.updateTime);
+    }
+    if (newState.updateTime !== null) {
+      newState.updateTime();
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -182,7 +194,7 @@ export default class App extends React.Component {
           setWordPosition={this.setWordPosition} />
         <View style={styles.stats}>
           <Score score={this.state.score} />
-          <Timer />
+          <Text>Time: {this.state.time} seconds</Text>
         </View>
       </View>
     );

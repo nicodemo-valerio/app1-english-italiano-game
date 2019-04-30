@@ -72,18 +72,27 @@ export default class App extends React.Component {
 
   updateLists = (wordToDelete) => {
     const words = this.state.words.filter(word => word !== wordToDelete);
-    let wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
-    wordList = wordObj.shuffleArray(wordList);
-    const currentWord = words[0];
-    const score = this.state.score + 1;
-    this.setState({
-      words,
-      wordList,
-      currentWord,
-      isEngFlagVisible: true,
-      isItaFlagVisible: true,
-      score
-    });
+    if (words.length === 0) {
+      const finalState = this.state;
+      finalState.currentWord = { eng: "You win!", ita: "Hai vinto!", img: require('./images/win.png') }
+      finalState.wordList = ["You win!", "Hai vinto!"];
+      finalState.isEngFlagVisible = false;
+      finalState.isItaFlagVisible = false;
+      this.setState({ finalState });
+    } else {
+      let wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
+      wordList = wordObj.shuffleArray(wordList);
+      const currentWord = words[0];
+      const score = this.state.score + 1;
+      this.setState({
+        words,
+        wordList,
+        currentWord,
+        isEngFlagVisible: true,
+        isItaFlagVisible: true,
+        score
+      });
+    }
   }
 
   updateFlagPosition = (lang, moveX, moveY) => {

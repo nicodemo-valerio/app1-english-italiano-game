@@ -30,18 +30,12 @@ export default styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItems: 'stretch',
-        justifyContent: 'space-evenly',
-        borderStyle: 'solid',
-        borderColor: 'brown',
-        borderWidth: 0.5
+        justifyContent: 'space-evenly'
     },
     word: {
         textAlign: 'center',
         width: '33%',
-        height: '25%',
-        borderStyle: 'solid',
-        borderColor: 'grey',
-        borderWidth: 0.5
+        height: '25%'
     },
     stats: {
         flex: 1,

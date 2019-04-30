@@ -72,6 +72,6 @@ export default class Word {
 
     getWords = () => {
         const shuffleWords = this.shuffleArray(this.words);
-        return shuffleWords;
+        return shuffleWords.slice(0, 8);
     }
 }

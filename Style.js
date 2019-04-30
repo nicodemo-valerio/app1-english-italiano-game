@@ -34,8 +34,13 @@ export default styles = StyleSheet.create({
     },
     word: {
         textAlign: 'center',
-        width: '33%',
-        height: '25%'
+        paddingTop: '3%',
+        width: '25%',
+        height: '30%',
+        borderStyle: 'dotted',
+        borderColor: 'grey',
+        borderWidth: 0.3,
+        borderRadius: 15
     },
     stats: {
         flex: 1,

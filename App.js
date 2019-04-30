@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, Image } from 'react-native';
 import styles from './Style.js';
 import Word from './Words.js';
+const wordObj = new Word();
 import WordToGuess from './components/WordToGuess';
 import WordList from './components/WordList';
 
@@ -40,8 +41,9 @@ export default class App extends React.Component {
       currentWord: null,
       flagEngPosition: null,
       flagItaPosition: null,
-      wordEngPosition: null,
-      wordItaPosition: null,
+      wordsGrid: { x: 0, y: 0 },
+      wordEngPosition: { x: 0, y: 0 },
+      wordItaPosition: { x: 0, y: 0 },
       isEngFlagVisible: true,
       isItaFlagVisible: true,
       score: 0
@@ -49,13 +51,11 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    const word = new Word();
-
-    const words = word.getWords();
+    const words = wordObj.getWords();
 
     let wordList = words.map(w => w.eng);
     wordList = wordList.concat(words.map(w => w.ita));
-    wordList = word.shuffleArray(wordList);
+    wordList = wordObj.shuffleArray(wordList);
 
     const currentWord = words[0];
 
@@ -72,7 +72,8 @@ export default class App extends React.Component {
 
   updateLists = (wordToDelete) => {
     const words = this.state.words.filter(word => word !== wordToDelete);
-    const wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
+    let wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
+    wordList = wordObj.shuffleArray(wordList);
     const currentWord = words[0];
     const score = this.state.score + 1;
     this.setState({
@@ -91,11 +92,11 @@ export default class App extends React.Component {
         () => {
           if (this.checkPosition(moveX, moveY, this.state.wordEngPosition)) {
             if (!this.state.isItaFlagVisible) {
-              console.log('Guessed 2');
+              //console.log('Guessed 2');
               const wordToDelete = this.state.currentWord;
               this.updateLists(wordToDelete);
             } else {
-              console.log('Guessed 1');
+              //console.log('Guessed 1');
               this.setState({ isEngFlagVisible: false });
             }
           }
@@ -106,11 +107,11 @@ export default class App extends React.Component {
         () => {
           if (this.checkPosition(moveX, moveY, this.state.wordItaPosition)) {
             if (!this.state.isEngFlagVisible) {
-              console.log('Indovinato 2');
+              //console.log('Indovinato 2');
               const wordToDelete = this.state.currentWord;
               this.updateLists(wordToDelete);
             } else {
-              console.log('Indovinato 1');
+              //console.log('Indovinato 1');
               this.setState({ isItaFlagVisible: false });
             }
           }
@@ -120,24 +121,39 @@ export default class App extends React.Component {
   }
 
   setWordPosition = (lang, x, y, width, height) => {
-    let newPosition = null;
+    //console.log('App.setWordPosition:', lang, x, y, width, height);
+    //set new position
+    const newPosition = { x: x, y: y, width: width, height: height };
+    const wordsGrid = { x: 0, y: 0 };
+    //set container position
+    const newState = this.state;
+
     if (lang === 'eng') {
-      newPosition = (this.state.wordEngPosition === null) ? { x: 0, y: 0, width: 0, height: 0 } : this.state.wordEngPosition;
+      newState.wordEngPosition = newPosition;
+      newState.wordEngPosition.x += this.state.wordsGrid.x;
+      newState.wordEngPosition.y += this.state.wordsGrid.y;
     }
-    else {
-      newPosition = (this.state.wordItaPosition === null) ? { x: 0, y: 0, width: 0, height: 0 } : this.state.wordItaPosition;
-    }
-    newPosition.x += x;
-    newPosition.y += y;
-    newPosition.width += width;
-    newPosition.height += height;
-    console.log('newPosition:', newPosition);
-    if (lang === 'eng') {
-      this.setState({ wordEngPosition: newPosition });
-    } else {
-      this.setState({ wordItaPosition: newPosition });
+    if (lang === 'ita') {
+      newState.wordItaPosition = newPosition;
+      newState.wordItaPosition.x += this.state.wordsGrid.x;
+      newState.wordItaPosition.y += this.state.wordsGrid.y;
     }
 
+    //add container position to new position
+    if (lang === null) {
+      newState.wordsGrid.x = x;
+      newState.wordsGrid.y = y;
+      const wordEngPosition = this.state.wordEngPosition;
+      wordEngPosition.x += newPosition.x;
+      wordEngPosition.y += newPosition.y;
+      const wordItaPosition = this.state.wordItaPosition;
+      wordItaPosition.x += newPosition.x;
+      wordItaPosition.y += newPosition.y;
+      newState.wordEngPosition = wordEngPosition;
+      newState.wordItaPosition = wordItaPosition;
+    }
+    this.setState(newState);
+    //this.setState(newState, () => console.log('App.setWordPosition', this.state.wordEngPosition, this.state.wordItaPosition));
   }
 
   render() {

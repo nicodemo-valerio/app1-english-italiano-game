@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import CurrentWord from './CurrentWord.js';
 import styles from '../Style.js';
 
-class WordList extends React.Component {
+class WordList extends Component {
     constructor(props) {
         super(props);
         this.state = { wordStyle: {} }
@@ -31,6 +31,8 @@ class WordList extends React.Component {
                         return <CurrentWord
                             key={index}
                             word={word}
+                            isEngFlagVisible={this.props.isEngFlagVisible}
+                            isItaFlagVisible={this.props.isItaFlagVisible}
                             lang={(word === this.props.currentWord.eng) ? 'eng' : 'ita'}
                             setWordPosition={this.setWordPosition} />
                     } else {

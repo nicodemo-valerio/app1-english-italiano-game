@@ -11,7 +11,6 @@ export default styles = StyleSheet.create({
     pageTitle: {
         fontSize: 30,
         fontWeight: 'bold',
-        paddingTop: '5%',
         paddingBottom: '5%'
     },
     wordToGuess: {

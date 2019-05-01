@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, Image, PanResponder, Animated } from 'react-native';
+import { View, Image } from 'react-native';
 import Flag from './Flag.js';
 import styles from '../Style.js';
 
-class WordToGuess extends React.Component {
+class WordToGuess extends Component {
     constructor(props) {
         super(props);
     }

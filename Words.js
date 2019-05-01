@@ -16,9 +16,24 @@ export default class Word {
             img: require('./images/cat.png')
         },
         {
+            eng: 'chicken',
+            ita: 'gallina',
+            img: require('./images/chicken.png')
+        },
+        {
+            eng: 'cloud',
+            ita: 'nuvola',
+            img: require('./images/cloud.png')
+        },
+        {
             eng: 'cow',
             ita: 'mucca',
             img: require('./images/cow.png')
+        },
+        {
+            eng: 'fire',
+            ita: 'fuoco',
+            img: require('./images/fire.png')
         },
         {
             eng: 'dog',
@@ -31,9 +46,19 @@ export default class Word {
             img: require('./images/fish.png')
         },
         {
+            eng: 'flower',
+            ita: 'fiore',
+            img: require('./images/flower.png')
+        },
+        {
             eng: 'hand',
             ita: 'mano',
             img: require('./images/hand.png')
+        },
+        {
+            eng: 'horse',
+            ita: 'cavallo',
+            img: require('./images/horse.png')
         },
         {
             eng: 'house',
@@ -41,9 +66,34 @@ export default class Word {
             img: require('./images/house.png')
         },
         {
+            eng: 'mouse',
+            ita: 'topo',
+            img: require('./images/mouse.png')
+        },
+        {
+            eng: 'mushroom',
+            ita: 'fungo',
+            img: require('./images/mushroom.png')
+        },
+        {
             eng: 'phone',
             ita: 'telefono',
             img: require('./images/phone.png')
+        },
+        {
+            eng: 'pig',
+            ita: 'maiale',
+            img: require('./images/pig.png')
+        },
+        {
+            eng: 'rabbit',
+            ita: 'coniglio',
+            img: require('./images/rabbit.png')
+        },
+        {
+            eng: 'rainbow',
+            ita: 'arcobaleno',
+            img: require('./images/rainbow.png')
         },
         {
             eng: 'sandwich',
@@ -51,9 +101,29 @@ export default class Word {
             img: require('./images/sandwich.png')
         },
         {
+            eng: 'snake',
+            ita: 'serpente',
+            img: require('./images/snake.png')
+        },
+        {
+            eng: 'spider',
+            ita: 'ragno',
+            img: require('./images/spider.png')
+        },
+        {
             eng: 'sun',
             ita: 'sole',
             img: require('./images/sun.png')
+        },
+        {
+            eng: 'sunflower',
+            ita: 'girasole',
+            img: require('./images/sunflower.png')
+        },
+        {
+            eng: 'tree',
+            ita: 'albero',
+            img: require('./images/tree.png')
         }
     ];
 

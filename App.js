@@ -1,22 +1,10 @@
 import React from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View } from 'react-native';
 import styles from './Style.js';
 import Word from './Words.js';
 const wordObj = new Word();
 import WordToGuess from './components/WordToGuess';
 import WordList from './components/WordList';
-
-class Score extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <Text style={{ textAlign: 'center' }}>Score: {this.props.score}</Text>
-    )
-  }
-}
 
 export default class App extends React.Component {
 
@@ -34,8 +22,7 @@ export default class App extends React.Component {
       isEngFlagVisible: true,
       isItaFlagVisible: true,
       score: 0,
-      time: 0,
-      updateTime: null
+      time: 0
     }
     this.updateTime = null;
   }
@@ -96,16 +83,17 @@ export default class App extends React.Component {
   }
 
   updateFlagPosition = (lang, moveX, moveY) => {
+    if (this.updateTime === null) {
+
+    }
     if (lang === 'eng') {
       this.setState({ flagEngPosition: { moveX: moveX, moveY: moveY } },
         () => {
           if (this.checkPosition(moveX, moveY, this.state.wordEngPosition)) {
             if (!this.state.isItaFlagVisible) {
-              //console.log('Guessed 2');
               const wordToDelete = this.state.currentWord;
               this.updateLists(wordToDelete);
             } else {
-              //console.log('Guessed 1');
               this.setState({ isEngFlagVisible: false });
             }
           }
@@ -116,11 +104,9 @@ export default class App extends React.Component {
         () => {
           if (this.checkPosition(moveX, moveY, this.state.wordItaPosition)) {
             if (!this.state.isEngFlagVisible) {
-              //console.log('Indovinato 2');
               const wordToDelete = this.state.currentWord;
               this.updateLists(wordToDelete);
             } else {
-              //console.log('Indovinato 1');
               this.setState({ isItaFlagVisible: false });
             }
           }
@@ -130,7 +116,6 @@ export default class App extends React.Component {
   }
 
   setWordPosition = (lang, x, y, width, height) => {
-    //console.log('App.setWordPosition:', lang, x, y, width, height);
     //set new position
     const newPosition = { x: x, y: y, width: width, height: height };
     const wordsGrid = { x: 0, y: 0 };
@@ -162,7 +147,6 @@ export default class App extends React.Component {
       newState.wordItaPosition = wordItaPosition;
     }
     this.setState(newState);
-    //this.setState(newState, () => console.log('App.setWordPosition', this.state.wordEngPosition, this.state.wordItaPosition));
   }
 
   render() {
@@ -170,6 +154,8 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <View>
           <Text style={styles.pageTitle}>English VS Italiano</Text>
+          <Text style={{ textAlign: 'center' }}>Drag the flag on top of word that represent the image</Text>
+          <Text style={{ textAlign: 'center' }}>Trascina la bandiera sopra la parola corrispondente al disegno</Text>
         </View>
         <WordToGuess
           currentWord={this.state.currentWord}
@@ -179,6 +165,8 @@ export default class App extends React.Component {
         <WordList
           wordList={this.state.wordList}
           currentWord={this.state.currentWord}
+          isEngFlagVisible={this.state.isEngFlagVisible}
+          isItaFlagVisible={this.state.isItaFlagVisible}
           setWordPosition={this.setWordPosition} />
         <View style={styles.stats}>
           <Text>Score: {this.state.score} / {this.state.words.length + this.state.score}</Text>

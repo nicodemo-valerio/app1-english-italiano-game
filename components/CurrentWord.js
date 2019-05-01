@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 import styles from '../Style.js';
 
 export class CurrentWord extends Component {
@@ -10,9 +10,16 @@ export class CurrentWord extends Component {
     }
 
     render() {
+        let style = { color: 'black' };
+        if (!this.props.isEngFlagVisible && this.props.lang === 'eng') {
+            style = { color: 'green' };
+        }
+        if (!this.props.isItaFlagVisible && this.props.lang === 'ita') {
+            style = { color: 'green' };
+        }
         return (
             <Text
-                style={styles.word}
+                style={[styles.word, style]}
                 onLayout={e => this.setWordPosition(e)}>
                 {this.props.word}
             </Text>

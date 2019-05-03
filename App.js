@@ -28,7 +28,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    const words = wordObj.getWords();
+    const words = wordObj.getWords(8);
 
     let wordList = words.map(w => w.eng);
     wordList = wordList.concat(words.map(w => w.ita));

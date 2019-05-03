@@ -12,7 +12,7 @@ export class CurrentWord extends Component {
     render() {
         let style = { color: 'black' };
         if (!this.props.isEngFlagVisible && this.props.lang === 'eng') {
-            style = { color: 'green' };
+            style = { color: 'blue' };
         }
         if (!this.props.isItaFlagVisible && this.props.lang === 'ita') {
             style = { color: 'green' };

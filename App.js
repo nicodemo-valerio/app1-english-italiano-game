@@ -1,12 +1,14 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
+import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import styles from './Style.js';
 import Word from './Words.js';
 const wordObj = new Word();
-import WordToGuess from './components/WordToGuess';
-import WordList from './components/WordList';
+import WordsContainer from './components/WordsContainer';
 
-export default class App extends React.Component {
+const WORDNUMBER = 7;
+
+class GameScreen extends React.Component {
 
   constructor(props) {
     super(props);
@@ -27,8 +29,8 @@ export default class App extends React.Component {
     this.updateTime = null;
   }
 
-  componentDidMount() {
-    const words = wordObj.getWords(8);
+  restartGame = () => {
+    const words = wordObj.getWords(WORDNUMBER);
 
     let wordList = words.map(w => w.eng);
     wordList = wordList.concat(words.map(w => w.ita));
@@ -38,7 +40,9 @@ export default class App extends React.Component {
     this.setState({
       words,
       wordList,
-      currentWord
+      currentWord,
+      score: 0,
+      time: 0
     });
 
     this.updateTime = setInterval(() => {
@@ -46,7 +50,12 @@ export default class App extends React.Component {
     }, 1000);
   }
 
+  componentDidMount() {
+    //this.restartGame();
+  }
+
   checkPosition = (moveX, moveY, wordPosition) => {
+    //console.log('checkPosition', moveX, moveY, wordPosition.x, wordPosition.y, wordPosition.width, wordPosition.height)
     if (moveX > wordPosition.x &&
       moveX < wordPosition.x + wordPosition.width &&
       moveY > wordPosition.y &&
@@ -62,8 +71,8 @@ export default class App extends React.Component {
       finalState.words = words;
       finalState.currentWord = { eng: 'You win!', ita: 'Hai vinto!', img: require('./images/win.png') }
       finalState.wordList = ['You win!', 'Hai vinto!'];
-      finalState.isEngFlagVisible = false;
-      finalState.isItaFlagVisible = false;
+      finalState.isEngFlagVisible = true;
+      finalState.isItaFlagVisible = true;
       finalState.score += 1;
       clearInterval(this.updateTime);
     } else {
@@ -118,7 +127,7 @@ export default class App extends React.Component {
   setWordPosition = (lang, x, y, width, height) => {
     //set new position
     const newPosition = { x: x, y: y, width: width, height: height };
-    const wordsGrid = { x: 0, y: 0 };
+    //const wordsGrid = { x: 0, y: 0 };
     //set container position
     const newState = this.state;
 
@@ -135,8 +144,8 @@ export default class App extends React.Component {
 
     //add container position to new position
     if (lang === null) {
-      newState.wordsGrid.x = x;
-      newState.wordsGrid.y = y;
+      newState.wordsGrid.x += x;
+      newState.wordsGrid.y += y;
       const wordEngPosition = this.state.wordEngPosition;
       wordEngPosition.x += newPosition.x;
       wordEngPosition.y += newPosition.y;
@@ -146,25 +155,27 @@ export default class App extends React.Component {
       newState.wordEngPosition = wordEngPosition;
       newState.wordItaPosition = wordItaPosition;
     }
+    //console.log('newState.wordEngPosition', newState.wordEngPosition);
+    //console.log('newState.wordItaPosition', newState.wordItaPosition);
     this.setState(newState);
+  }
+
+  setPosition = e => {
+    const { x, y } = e.nativeEvent.layout;
+    //console.log('setPosition', x, y);
+    this.setWordPosition(null, x, y, 0, 0);
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <View>
-          <Text style={styles.pageTitle}>English VS Italiano</Text>
-          <Text style={{ textAlign: 'center' }}>Drag the flag on top of word that represent the image</Text>
-          <Text style={{ textAlign: 'center' }}>Trascina la bandiera sopra la parola corrispondente al disegno</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.pageTitle}>English • Italiano</Text>
         </View>
-        <WordToGuess
-          currentWord={this.state.currentWord}
-          updateFlagPosition={this.updateFlagPosition}
-          isEngFlagVisible={this.state.isEngFlagVisible}
-          isItaFlagVisible={this.state.isItaFlagVisible} />
-        <WordList
+        <WordsContainer
           wordList={this.state.wordList}
           currentWord={this.state.currentWord}
+          updateFlagPosition={this.updateFlagPosition}
           isEngFlagVisible={this.state.isEngFlagVisible}
           isItaFlagVisible={this.state.isItaFlagVisible}
           setWordPosition={this.setWordPosition} />
@@ -172,7 +183,31 @@ export default class App extends React.Component {
           <Text>Score: {this.state.score} / {this.state.words.length + this.state.score}</Text>
           <Text>Time: {this.state.time} seconds</Text>
         </View>
+        <Button
+          style={styles.button}
+          onPress={this.restartGame}
+          title="Play"
+          accessibilityLabel="Play the game" />
       </View>
     );
   }
 }
+
+class HelpScreen extends React.Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.pageTitle}>English VS Italiano</Text>
+        <Text>How to play: drag the English flag on top of English word that represent the image. Do the same with the Italian flag.</Text>
+        <Text>Come giocare: trascina la bandiera Italiana sopra la parola corrispondente al disegno. Fai lo stesso con la bandiera Inglese.</Text>
+      </View>
+    )
+  }
+}
+
+const TabNavigator = createBottomTabNavigator({
+  Game: GameScreen,
+  Help: HelpScreen,
+});
+
+export default createAppContainer(TabNavigator);

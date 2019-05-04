@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import CurrentWord from './CurrentWord.js';
 import styles from '../Style.js';
 
-class WordList extends Component {
+class WordsGrid extends Component {
     constructor(props) {
         super(props);
         this.state = { wordStyle: {} }
@@ -48,4 +48,4 @@ class WordList extends Component {
     }
 }
 
-export default WordList
+export default WordsGrid

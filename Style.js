@@ -6,12 +6,12 @@ export default styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'stretch',
         justifyContent: 'space-evenly',
-        margin: 10
+        paddingTop: 35
     },
     pageTitle: {
         fontSize: 30,
         fontWeight: 'bold',
-        paddingBottom: '5%'
+        textAlign: 'center'
     },
     wordToGuess: {
         flex: 1,
@@ -25,17 +25,18 @@ export default styles = StyleSheet.create({
         padding: 10
     },
     wordList: {
-        flex: 1,
+        flex: 4,
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItems: 'stretch',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+        //backgroundColor: 'grey'
     },
     word: {
         textAlign: 'center',
         paddingTop: '3%',
-        width: '25%',
-        height: '30%',
+        width: '33%',
+        height: '20%',
         borderStyle: 'dotted',
         borderColor: 'grey',
         borderWidth: 0.3,

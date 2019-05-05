@@ -47,9 +47,9 @@ export class Flag extends Component {
         let imageStyle = { transform: [{ translateX }, { translateY }], zIndex: 10 };
         let flagImg;
         if (this.props.isVisible === false) {
-            flagImg = require('../images/white.png');
+            flagImg = require('../assets/images/white.png');
         } else {
-            flagImg = (this.props.type === 'eng') ? require('../images/flag-eng.png') : require('../images/flag-ita.png');
+            flagImg = (this.props.type === 'eng') ? require('../assets/images/flag-eng.png') : require('../assets/images/flag-ita.png');
         }
 
         return (

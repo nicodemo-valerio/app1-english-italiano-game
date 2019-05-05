@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Text, View } from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import styles from './Style.js';
-import Word from './Words.js';
+import Word from './constants/Words.js';
 const wordObj = new Word();
 import WordsContainer from './components/WordsContainer';
 
@@ -10,7 +10,9 @@ const WORDNUMBER = 7;
 
 class GameScreen extends React.Component {
 
-  constructor(props) {
+  static
+
+    constructor(props) {
     super(props);
     this.state = {
       words: [],
@@ -50,10 +52,6 @@ class GameScreen extends React.Component {
     }, 1000);
   }
 
-  componentDidMount() {
-    //this.restartGame();
-  }
-
   checkPosition = (moveX, moveY, wordPosition) => {
     //console.log('checkPosition', moveX, moveY, wordPosition.x, wordPosition.y, wordPosition.width, wordPosition.height)
     if (moveX > wordPosition.x &&
@@ -69,7 +67,7 @@ class GameScreen extends React.Component {
     if (words.length === 0) {
       const finalState = this.state;
       finalState.words = words;
-      finalState.currentWord = { eng: 'You win!', ita: 'Hai vinto!', img: require('./images/win.png') }
+      finalState.currentWord = { eng: 'You win!', ita: 'Hai vinto!', img: require('./assets/images/win.png') }
       finalState.wordList = ['You win!', 'Hai vinto!'];
       finalState.isEngFlagVisible = true;
       finalState.isItaFlagVisible = true;

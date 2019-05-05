@@ -16,19 +16,22 @@ class GameScreen extends React.Component {
       words: [],
       wordList: [],
       currentWord: null,
-      flagEngPosition: null,
-      flagItaPosition: null,
       wordsGrid: { x: 0, y: 0 },
-      wordEngPosition: { x: 0, y: 0 },
-      wordItaPosition: { x: 0, y: 0 },
-      isEngFlagVisible: true,
-      isItaFlagVisible: true,
+      wordPosition: {
+        eng: { x: 0, y: 0 },
+        ita: { x: 0, y: 0 }
+      },
+      isFlagVisible: {
+        eng: true,
+        ita: true
+      },
       score: 0,
       time: 0
     }
     this.updateTime = null;
   }
 
+  // Fetch data from array, reset score, start timer
   restartGame = () => {
     const words = Words.getWords(WORDNUMBER);
 
@@ -41,8 +44,10 @@ class GameScreen extends React.Component {
       words,
       wordList,
       currentWord,
-      isEngFlagVisible: true,
-      isItaFlagVisible: true,
+      isFlagVisible: {
+        eng: true,
+        ita: true
+      },
       score: 0,
       time: 0
     });
@@ -52,8 +57,8 @@ class GameScreen extends React.Component {
     }, 1000);
   }
 
+  // Check if the flag position overlap the position of the word
   checkPosition = (moveX, moveY, wordPosition) => {
-    //console.log('checkPosition', moveX, moveY, wordPosition.x, wordPosition.y, wordPosition.width, wordPosition.height)
     if (moveX > wordPosition.x &&
       moveX < wordPosition.x + wordPosition.width &&
       moveY > wordPosition.y &&
@@ -61,21 +66,29 @@ class GameScreen extends React.Component {
     return false;
   }
 
+  // Update state when a word (eng and ita) is guessed
   updateLists = (wordToDelete) => {
     const words = this.state.words.filter(word => word !== wordToDelete);
     //game over
     if (words.length === 0) {
       const finalState = this.state;
       finalState.words = words;
+
+      // For layout
       finalState.currentWord = { eng: 'You win!', ita: 'Hai vinto!', img: require('./assets/images/win.png') }
       finalState.wordList = ['You win!', 'Hai vinto!'];
-      finalState.isEngFlagVisible = true;
-      finalState.isItaFlagVisible = true;
+      finalState.isFlagVisible = {
+        eng: true,
+        ita: true
+      };
       finalState.score += 1;
       clearInterval(this.updateTime);
       this.setState(finalState);
     } else {
+      // Remove guessed word from the list
       let wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
+
+      // Shuffle remaining words to display
       wordList = Words.shuffleArray(wordList);
       const currentWord = words[0];
       const score = this.state.score + 1;
@@ -83,76 +96,56 @@ class GameScreen extends React.Component {
         words,
         wordList,
         currentWord,
-        isEngFlagVisible: true,
-        isItaFlagVisible: true,
+        isFlagVisible: {
+          eng: true,
+          ita: true
+        },
         score
       });
     }
   }
 
+  // Update flag position 
   updateFlagPosition = (lang, moveX, moveY) => {
-    if (lang === 'eng') {
-      this.setState({ flagEngPosition: { moveX: moveX, moveY: moveY } },
-        () => {
-          if (this.checkPosition(moveX, moveY, this.state.wordEngPosition)) {
-            if (!this.state.isItaFlagVisible) {
-              const wordToDelete = this.state.currentWord;
-              this.updateLists(wordToDelete);
-            } else {
-              this.setState({ isEngFlagVisible: false });
-            }
-          }
-        });
-    }
-    if (lang === 'ita') {
-      this.setState({ flagItaPosition: { moveX: moveX, moveY: moveY } },
-        () => {
-          if (this.checkPosition(moveX, moveY, this.state.wordItaPosition)) {
-            if (!this.state.isEngFlagVisible) {
-              const wordToDelete = this.state.currentWord;
-              this.updateLists(wordToDelete);
-            } else {
-              this.setState({ isItaFlagVisible: false });
-            }
-          }
+    if (this.checkPosition(moveX, moveY, this.state.wordPosition[lang])) {
+      const isFlagVisible = this.state.isFlagVisible;
+      isFlagVisible[lang] = false;
+      this.setState({ isFlagVisible }, () => {
+        if (!this.state.isFlagVisible['eng'] && !this.state.isFlagVisible['ita']) {
+          const wordToDelete = this.state.currentWord;
+          this.updateLists(wordToDelete);
         }
-      )
+      });
     }
   }
 
+  // Set screen position of the current word to be guessed
   setWordPosition = (lang, x, y, width, height) => {
     //set new position
     const newPosition = { x: x, y: y, width: width, height: height };
-    //const wordsGrid = { x: 0, y: 0 };
-    //set container position
+
+    //set container position WordsGrid and WordsContainer
     const newState = this.state;
-
-    if (lang === 'eng') {
-      newState.wordEngPosition = newPosition;
-      newState.wordEngPosition.x += this.state.wordsGrid.x;
-      newState.wordEngPosition.y += this.state.wordsGrid.y;
-    }
-    if (lang === 'ita') {
-      newState.wordItaPosition = newPosition;
-      newState.wordItaPosition.x += this.state.wordsGrid.x;
-      newState.wordItaPosition.y += this.state.wordsGrid.y;
+    if (lang === 'eng' || lang === 'ita') {
+      newState.wordPosition[lang] = newPosition;
+      newState.wordPosition[lang].x += this.state.wordsGrid.x;
+      newState.wordPosition[lang].y += this.state.wordsGrid.y;
     }
 
-    //add container position to new position
+    //add container position to existing position in order to calculate the absolute position on the screen
     if (lang === null) {
       newState.wordsGrid.x += x;
       newState.wordsGrid.y += y;
-      const wordEngPosition = this.state.wordEngPosition;
+      const wordEngPosition = this.state.wordPosition['eng'];
       wordEngPosition.x += newPosition.x;
       wordEngPosition.y += newPosition.y;
-      const wordItaPosition = this.state.wordItaPosition;
+      const wordItaPosition = this.state.wordPosition['ita'];
       wordItaPosition.x += newPosition.x;
       wordItaPosition.y += newPosition.y;
-      newState.wordEngPosition = wordEngPosition;
-      newState.wordItaPosition = wordItaPosition;
+      newState.wordPosition['eng'] = wordEngPosition;
+      newState.wordPosition['ita'] = wordItaPosition;
     }
-    //console.log('newState.wordEngPosition', newState.wordEngPosition);
-    //console.log('newState.wordItaPosition', newState.wordItaPosition);
+
     this.setState(newState);
   }
 
@@ -166,8 +159,7 @@ class GameScreen extends React.Component {
           wordList={this.state.wordList}
           currentWord={this.state.currentWord}
           updateFlagPosition={this.updateFlagPosition}
-          isEngFlagVisible={this.state.isEngFlagVisible}
-          isItaFlagVisible={this.state.isItaFlagVisible}
+          isFlagVisible={this.state.isFlagVisible}
           setWordPosition={this.setWordPosition} />
         <View style={styles.stats}>
           <Text>Score {this.state.score} / {this.state.words.length + this.state.score}</Text>

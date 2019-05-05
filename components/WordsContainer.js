@@ -7,7 +7,6 @@ class WordsContainer extends Component {
 
     setWordContainerPosition = e => {
         const { x, y } = e.nativeEvent.layout;
-        //console.log('WordsContainer.setWordContainerPosition:', x, y);
         this.props.setWordPosition(null, x, y, 0, 0);
     }
 
@@ -20,13 +19,11 @@ class WordsContainer extends Component {
                 <WordToGuess
                     currentWord={this.props.currentWord}
                     updateFlagPosition={this.props.updateFlagPosition}
-                    isEngFlagVisible={this.props.isEngFlagVisible}
-                    isItaFlagVisible={this.props.isItaFlagVisible} />
+                    isFlagVisible={this.props.isFlagVisible} />
                 <WordsGrid
                     wordList={this.props.wordList}
                     currentWord={this.props.currentWord}
-                    isEngFlagVisible={this.props.isEngFlagVisible}
-                    isItaFlagVisible={this.props.isItaFlagVisible}
+                    isFlagVisible={this.props.isFlagVisible}
                     setWordPosition={this.props.setWordPosition} />
             </View>
         );

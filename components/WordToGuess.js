@@ -14,13 +14,13 @@ class WordToGuess extends Component {
                 <View style={styles.wordToGuess}>
                     <Flag type="eng"
                         updateFlagPosition={this.props.updateFlagPosition}
-                        isVisible={this.props.isEngFlagVisible} />
+                        isVisible={this.props.isFlagVisible['eng']} />
                     <Image
                         source={this.props.currentWord.img}
                         style={styles.wordImage} />
                     <Flag type="ita"
                         updateFlagPosition={this.props.updateFlagPosition}
-                        isVisible={this.props.isItaFlagVisible} />
+                        isVisible={this.props.isFlagVisible['ita']} />
                 </View>
             )
         }

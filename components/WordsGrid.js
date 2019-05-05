@@ -10,13 +10,11 @@ class WordsGrid extends Component {
     }
 
     setWordPosition = (lang, x, y, width, height) => {
-        //console.log('WordList.setWordPosition(): ', lang);
         this.props.setWordPosition(lang, x, y, width, height);
     }
 
     setWordContainerPosition = e => {
         const { x, y } = e.nativeEvent.layout;
-        //console.log('WordList.setWordContainerPosition:', x, y);
         this.props.setWordPosition(null, x, y, 0, 0);
     }
 
@@ -31,8 +29,7 @@ class WordsGrid extends Component {
                         return <CurrentWord
                             key={index}
                             word={word}
-                            isEngFlagVisible={this.props.isEngFlagVisible}
-                            isItaFlagVisible={this.props.isItaFlagVisible}
+                            isFlagVisible={this.props.isFlagVisible}
                             lang={(word === this.props.currentWord.eng) ? 'eng' : 'ita'}
                             setWordPosition={this.setWordPosition} />
                     } else {

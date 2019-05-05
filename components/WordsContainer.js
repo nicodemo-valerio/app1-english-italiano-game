@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import WordToGuess from './WordToGuess.js';
 import WordsGrid from './WordsGrid';
-import styles from '../Style.js';
 
 class WordsContainer extends Component {
 
@@ -13,7 +12,6 @@ class WordsContainer extends Component {
     }
 
     render() {
-
         return (
             <View
                 style={{ flex: 3 }}

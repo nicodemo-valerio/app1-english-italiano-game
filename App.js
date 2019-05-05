@@ -2,8 +2,7 @@ import React from 'react';
 import { Button, Text, View, Image } from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import styles from './Style.js';
-import Word from './constants/Words.js';
-const wordObj = new Word();
+import Words from './constants/Words.js';
 import WordsContainer from './components/WordsContainer';
 
 const WORDNUMBER = 7;
@@ -31,11 +30,11 @@ class GameScreen extends React.Component {
   }
 
   restartGame = () => {
-    const words = wordObj.getWords(WORDNUMBER);
+    const words = Words.getWords(WORDNUMBER);
 
     let wordList = words.map(w => w.eng);
     wordList = wordList.concat(words.map(w => w.ita));
-    wordList = wordObj.shuffleArray(wordList);
+    wordList = Words.shuffleArray(wordList);
 
     const currentWord = words[0];
     this.setState({
@@ -77,7 +76,7 @@ class GameScreen extends React.Component {
       this.setState(finalState);
     } else {
       let wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
-      wordList = wordObj.shuffleArray(wordList);
+      wordList = Words.shuffleArray(wordList);
       const currentWord = words[0];
       const score = this.state.score + 1;
       this.setState({
@@ -92,9 +91,6 @@ class GameScreen extends React.Component {
   }
 
   updateFlagPosition = (lang, moveX, moveY) => {
-    if (this.updateTime === null) {
-
-    }
     if (lang === 'eng') {
       this.setState({ flagEngPosition: { moveX: moveX, moveY: moveY } },
         () => {
@@ -160,12 +156,6 @@ class GameScreen extends React.Component {
     this.setState(newState);
   }
 
-  setPosition = e => {
-    const { x, y } = e.nativeEvent.layout;
-    //console.log('setPosition', x, y);
-    this.setWordPosition(null, x, y, 0, 0);
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -186,7 +176,7 @@ class GameScreen extends React.Component {
         <Button
           style={styles.button}
           onPress={this.restartGame}
-          title="Play"
+          title="Start"
           accessibilityLabel="Play the game" />
       </View>
     );
@@ -200,18 +190,29 @@ class HelpScreen extends React.Component {
         <Text style={styles.pageTitle}>English • Italiano</Text>
         <Image source={require('./assets/images/flag-eng.png')} />
         <Text>How to play: drag the English flag on top of English word that represent the image. Do the same with the Italian flag.</Text>
-        <Text>Click on "Play" to start the game or restart if you are still playing.</Text>
+        <Text>Click on "Start" to start the game or restart if you are still playing.</Text>
         <Image source={require('./assets/images/flag-ita.png')} />
-        <Text>Come giocare: trascina la bandiera Italiana sopra la parola corrispondente al disegno. Fai lo stesso con la bandiera Inglese.</Text>
-        <Text>Clicca su "Play" per iniziare a giocare o ricominciare durante una partita in corso.</Text>
+        <Text style={{ textAlign: 'left' }}>Come giocare: trascina la bandiera Italiana sopra la parola corrispondente al disegno. Fai lo stesso con la bandiera Inglese.</Text>
+        <Text>Clicca su "Start" per iniziare a giocare o ricominciare durante una partita in corso.</Text>
       </View>
     )
   }
 }
 
-const TabNavigator = createBottomTabNavigator({
-  Help: HelpScreen,
-  Play: GameScreen
-});
+const TabNavigator = createBottomTabNavigator(
+  {
+    Play: GameScreen,
+    Help: HelpScreen
+  },
+  {
+    initialRouteName: 'Help',
+    tabBarOptions: {
+      labelStyle: {
+        fontSize: 15
+      },
+      style: { paddingBottom: 5 }
+    }
+  }
+);
 
 export default createAppContainer(TabNavigator);

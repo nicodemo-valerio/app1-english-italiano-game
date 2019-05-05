@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Button, Text, View, Image } from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import styles from './Style.js';
 import Word from './constants/Words.js';
@@ -10,10 +10,9 @@ const WORDNUMBER = 7;
 
 class GameScreen extends React.Component {
 
-  static
-
-    constructor(props) {
+  constructor(props) {
     super(props);
+
     this.state = {
       words: [],
       wordList: [],
@@ -43,6 +42,8 @@ class GameScreen extends React.Component {
       words,
       wordList,
       currentWord,
+      isEngFlagVisible: true,
+      isItaFlagVisible: true,
       score: 0,
       time: 0
     });
@@ -73,6 +74,7 @@ class GameScreen extends React.Component {
       finalState.isItaFlagVisible = true;
       finalState.score += 1;
       clearInterval(this.updateTime);
+      this.setState(finalState);
     } else {
       let wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
       wordList = wordObj.shuffleArray(wordList);
@@ -178,8 +180,8 @@ class GameScreen extends React.Component {
           isItaFlagVisible={this.state.isItaFlagVisible}
           setWordPosition={this.setWordPosition} />
         <View style={styles.stats}>
-          <Text>Score: {this.state.score} / {this.state.words.length + this.state.score}</Text>
-          <Text>Time: {this.state.time} seconds</Text>
+          <Text>Score {this.state.score} / {this.state.words.length + this.state.score}</Text>
+          <Text>Time {Number.parseInt(this.state.time / 60)} min {this.state.time % 60} sec</Text>
         </View>
         <Button
           style={styles.button}
@@ -194,18 +196,22 @@ class GameScreen extends React.Component {
 class HelpScreen extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.pageTitle}>English VS Italiano</Text>
+      <View style={styles.helpScreen}>
+        <Text style={styles.pageTitle}>English • Italiano</Text>
+        <Image source={require('./assets/images/flag-eng.png')} />
         <Text>How to play: drag the English flag on top of English word that represent the image. Do the same with the Italian flag.</Text>
+        <Text>Click on "Play" to start the game or restart if you are still playing.</Text>
+        <Image source={require('./assets/images/flag-ita.png')} />
         <Text>Come giocare: trascina la bandiera Italiana sopra la parola corrispondente al disegno. Fai lo stesso con la bandiera Inglese.</Text>
+        <Text>Clicca su "Play" per iniziare a giocare o ricominciare durante una partita in corso.</Text>
       </View>
     )
   }
 }
 
 const TabNavigator = createBottomTabNavigator({
-  Game: GameScreen,
   Help: HelpScreen,
+  Play: GameScreen
 });
 
 export default createAppContainer(TabNavigator);

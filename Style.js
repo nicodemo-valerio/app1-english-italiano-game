@@ -47,5 +47,11 @@ export default styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center'
+    },
+    helpScreen: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        padding: 20
     }
 });

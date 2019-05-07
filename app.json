@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "English VS Italiano",
+    "name": "Learn English • Impara Italiano",
     "slug": "english-vs-italiano-game",
+    "description": "A game for learning English and Italian languages",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [

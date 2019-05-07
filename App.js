@@ -120,7 +120,7 @@ class GameScreen extends React.Component {
   }
 
   // Set screen position of the current word to be guessed
-  setWordPosition = (lang, x, y, width, height) => {
+  setLayout = (lang, x, y, width, height) => {
     //set new position
     const newPosition = { x: x, y: y, width: width, height: height };
 
@@ -145,7 +145,7 @@ class GameScreen extends React.Component {
       newState.wordPosition['eng'] = wordEngPosition;
       newState.wordPosition['ita'] = wordItaPosition;
     }
-
+    //console.log('eng', newState.wordPosition['eng'].x, newState.wordPosition['eng'].y, 'ita', newState.wordPosition['ita'].x, newState.wordPosition['ita'].y);
     this.setState(newState);
   }
 
@@ -160,7 +160,7 @@ class GameScreen extends React.Component {
           currentWord={this.state.currentWord}
           updateFlagPosition={this.updateFlagPosition}
           isFlagVisible={this.state.isFlagVisible}
-          setWordPosition={this.setWordPosition} />
+          setLayout={this.setLayout} />
         <View style={styles.stats}>
           <Text>Score {this.state.score} / {this.state.words.length + this.state.score}</Text>
           <Text>Time {Number.parseInt(this.state.time / 60)} min {this.state.time % 60} sec</Text>
@@ -179,7 +179,7 @@ class HelpScreen extends React.Component {
   render() {
     return (
       <View style={styles.helpScreen}>
-        <Text style={styles.pageTitle}>English • Italiano</Text>
+        <Text style={styles.pageTitle}>Help • Aiuto</Text>
         <Image source={require('./assets/images/flag-eng.png')} />
         <Text>How to play: drag the English flag on top of English word that represent the image. Do the same with the Italian flag.</Text>
         <Text>Click on "Start" to start the game or restart if you are still playing.</Text>

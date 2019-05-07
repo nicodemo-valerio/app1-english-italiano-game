@@ -3,9 +3,9 @@ import { Text } from 'react-native';
 import styles from '../Style.js';
 
 export class CurrentWord extends Component {
-    setWordPosition = (e) => {
+    setLayout = e => {
         const { x, y, width, height } = e.nativeEvent.layout;
-        this.props.setWordPosition(this.props.lang, x, y, width, height);
+        this.props.setLayout(this.props.lang, x, y, width, height);
     }
 
     render() {
@@ -19,7 +19,7 @@ export class CurrentWord extends Component {
         return (
             <Text
                 style={[styles.word, style]}
-                onLayout={e => this.setWordPosition(e)}>
+                onLayout={e => this.setLayout(e)}>
                 {this.props.word}
             </Text>
         )

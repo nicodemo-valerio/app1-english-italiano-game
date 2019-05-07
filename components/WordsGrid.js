@@ -9,20 +9,20 @@ class WordsGrid extends Component {
         this.state = { wordStyle: {} }
     }
 
-    setWordPosition = (lang, x, y, width, height) => {
-        this.props.setWordPosition(lang, x, y, width, height);
+    setLayout = (lang, x, y, width, height) => {
+        this.props.setLayout(lang, x, y, width, height);
     }
 
-    setWordContainerPosition = e => {
+    handleOnLayout = e => {
         const { x, y } = e.nativeEvent.layout;
-        this.props.setWordPosition(null, x, y, 0, 0);
+        this.props.setLayout(null, x, y, 0, 0);
     }
 
     render() {
 
         return (
             <View style={styles.wordList}
-                onLayout={e => this.setWordContainerPosition(e)}>
+                onLayout={e => this.handleOnLayout(e)}>
                 {this.props.wordList.map((word, index) => {
                     if (word === this.props.currentWord.eng ||
                         word === this.props.currentWord.ita) {
@@ -31,7 +31,7 @@ class WordsGrid extends Component {
                             word={word}
                             isFlagVisible={this.props.isFlagVisible}
                             lang={(word === this.props.currentWord.eng) ? 'eng' : 'ita'}
-                            setWordPosition={this.setWordPosition} />
+                            setLayout={this.setLayout} />
                     } else {
                         return <Text
                             style={styles.word}

@@ -4,11 +4,6 @@ import CurrentWord from './CurrentWord.js';
 import styles from '../Style.js';
 
 class WordsGrid extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { wordStyle: {} }
-    }
-
     setLayout = (lang, x, y, width, height) => {
         this.props.setLayout(lang, x, y, width, height);
     }
@@ -19,25 +14,32 @@ class WordsGrid extends Component {
     }
 
     render() {
-
         return (
             <View style={styles.wordList}
                 onLayout={e => this.handleOnLayout(e)}>
                 {this.props.wordList.map((word, index) => {
-                    if (word === this.props.currentWord.eng ||
-                        word === this.props.currentWord.ita) {
-                        return <CurrentWord
-                            key={index}
-                            word={word}
-                            isFlagVisible={this.props.isFlagVisible}
-                            lang={(word === this.props.currentWord.eng) ? 'eng' : 'ita'}
-                            setLayout={this.setLayout} />
-                    } else {
+                    if (word !== this.props.currentWord.eng && word !== this.props.currentWord.ita) {
                         return <Text
                             style={styles.word}
                             key={index}>
                             {word}
                         </Text>
+                    }
+                    if (word === this.props.currentWord.eng) {
+                        return <CurrentWord
+                            key={index}
+                            word={word}
+                            isFlagVisible={this.props.isFlagVisible}
+                            lang="eng"
+                            setLayout={this.setLayout} />
+                    }
+                    if (word === this.props.currentWord.ita) {
+                        return <CurrentWord
+                            key={index}
+                            word={word}
+                            isFlagVisible={this.props.isFlagVisible}
+                            lang="ita"
+                            setLayout={this.setLayout} />
                     }
                 })}
             </View>

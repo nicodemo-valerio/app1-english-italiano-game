@@ -5,7 +5,7 @@ import styles from './Style.js';
 import Words from './constants/Words.js';
 import WordsContainer from './components/WordsContainer';
 
-const WORDNUMBER = 7;
+const WORDNUMBER = 10;
 
 class GameScreen extends React.Component {
 
@@ -86,15 +86,16 @@ class GameScreen extends React.Component {
       this.setState(finalState);
     } else {
       // Remove guessed word from the list
-      let wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
+      //let wordList = this.state.wordList.filter(word => (word !== wordToDelete.eng && word !== wordToDelete.ita));
 
       // Shuffle remaining words to display
-      wordList = Words.shuffleArray(wordList);
+      //wordList = Words.shuffleArray(wordList);
+      //wordlist = wordList.reverse();
       const currentWord = words[0];
       const score = this.state.score + 1;
       this.setState({
         words,
-        wordList,
+        //wordList,
         currentWord,
         isFlagVisible: {
           eng: true,
@@ -108,9 +109,11 @@ class GameScreen extends React.Component {
   // Update flag position 
   updateFlagPosition = (lang, moveX, moveY) => {
     if (this.checkPosition(moveX, moveY, this.state.wordPosition[lang])) {
-      const isFlagVisible = this.state.isFlagVisible;
-      isFlagVisible[lang] = false;
-      this.setState({ isFlagVisible }, () => {
+      newState = this.state;
+      //newState.wordPosition[lang] = { x: null, y: null };
+      newState.isFlagVisible[lang] = false;
+      this.setState(newState, () => {
+        //console.log(this.state.wordPosition);
         if (!this.state.isFlagVisible['eng'] && !this.state.isFlagVisible['ita']) {
           const wordToDelete = this.state.currentWord;
           this.updateLists(wordToDelete);
@@ -146,7 +149,9 @@ class GameScreen extends React.Component {
       newState.wordPosition['ita'] = wordItaPosition;
     }
     //console.log('eng', newState.wordPosition['eng'].x, newState.wordPosition['eng'].y, 'ita', newState.wordPosition['ita'].x, newState.wordPosition['ita'].y);
-    this.setState(newState);
+    this.setState(newState, () => {
+      //console.log(this.state.wordPosition);
+    });
   }
 
   render() {
